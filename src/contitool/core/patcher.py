@@ -62,7 +62,7 @@ from contitool.core.constants import (
     UNSUPPORTED_DATASET_RU,
     UNSUPPORTED_DATASET_WARNING,
 )
-from contitool.i18n import get_lang, tr
+from contitool.i18n import tr
 from contitool.progress import NULL_REPORTER, OperationReporter
 
 
@@ -600,7 +600,7 @@ def apply_dflash_swap_fecs(
         pay[ent_slice] = ent_hdr
         enabled_applied.append(fec)
         fec_names = KNOWN_GATEWAY_FECS.get(fec)
-        desc = (fec_names[1] if get_lang() == "en" else fec_names[0]) if fec_names else f"0x{fec:08X}"
+        desc = tr(fec_names[0], fec_names[1]) if fec_names else f"0x{fec:08X}"
         reporter.success(
             tr(
                 f"Активирован Multi-FSC слот #{slot:02d} @ 0x{off:04X}: {desc} (CRC-32=0x{slot_crc:08X})",

@@ -44,7 +44,7 @@ from contitool.core.zdc_templates import (
     get_rom_bem_records,
     get_zdc_template_bytes,
 )
-from contitool.i18n import get_lang, tr
+from contitool.i18n import tr
 from contitool.progress import NULL_REPORTER, OperationReporter
 
 ZDC_REGION_END = 0x3040
@@ -802,7 +802,7 @@ class FpaSlotState:
 
     @property
     def name(self) -> str:
-        return self.name_en if get_lang() == "en" else self.name_ru
+        return tr(self.name_ru, self.name_en)
 
     @property
     def kl15_persists(self) -> bool:
@@ -1304,7 +1304,7 @@ class FpaDataset:
         for idx, fg in enumerate(s032):
             if fg != 0:
                 ru, en = FPA_SG_CATALOG.get(fg, (f"Подсистема 0x{fg:02X}", f"Subsystem 0x{fg:02X}"))
-                out.append((idx, fg, en if get_lang() == "en" else ru))
+                out.append((idx, fg, tr(ru, en)))
         return out
 
     def get_target_mode(self, slot: int, log_idx: int) -> int:
@@ -1769,7 +1769,7 @@ class PacoParticipantInfo:
 
     @property
     def sg_name(self) -> str:
-        return self.sg_name_en if get_lang() == "en" else self.sg_name_ru
+        return tr(self.sg_name_ru, self.sg_name_en)
 
 
 @dataclasses.dataclass
@@ -1999,7 +1999,7 @@ class BemSlotInfo:
 
     @property
     def matched_label(self) -> str:
-        return self.matched_label_en if get_lang() == "en" else self.matched_label_ru
+        return tr(self.matched_label_ru, self.matched_label_en)
 
 
 @dataclasses.dataclass
@@ -2028,7 +2028,7 @@ def parse_bem_block(df: bytes) -> BemDataset:
     for sidx in range(9):
         cls_id, sup_id = struct.unpack_from("BB", buf, 0x0004 + sidx * 2)
         sup_ru, sup_en = BEM_SUPPLIER_NAMES.get(sup_id, (f"Поставщик 0x{sup_id:02X}", f"Supplier 0x{sup_id:02X}"))
-        sup_name = sup_en if get_lang() == "en" else sup_ru
+        sup_name = tr(sup_ru, sup_en)
         rec = buf[0x0018 + sidx * 332 : 0x0018 + (sidx + 1) * 332]
         if all(b == 0xFF for b in rec):
             slots.append(BemSlotInfo(slot_idx=sidx, empty=True, class_id=cls_id, supplier_id=sup_id, supplier_name=sup_name))

@@ -8,7 +8,7 @@ import re
 import os
 import sys
 
-from contitool.i18n import get_lang
+from contitool.i18n import tr
 
 AUTHOR_CREDIT = "Made by PerkTheFox"
 AUTHOR_SITE_URL = "https://vwhacking.antonperk.com"
@@ -185,15 +185,15 @@ class SlotSpec:
 
     @property
     def short(self) -> str:
-        return self.short_en if get_lang() == "en" else self.short_ru
+        return tr(self.short_ru, self.short_en)
 
     @property
     def details(self) -> str:
-        return self.details_en if get_lang() == "en" else self.details_ru
+        return tr(self.details_ru, self.details_en)
 
     @property
     def notes(self) -> str:
-        return self.notes_en if get_lang() == "en" else self.notes_ru
+        return tr(self.notes_ru, self.notes_en)
 
     @property
     def cp_tx(self) -> int:

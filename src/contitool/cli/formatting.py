@@ -30,7 +30,7 @@ from contitool.core.constants import (
     STOCK_SWAP_MODULUS,
     T20_BENCH_PINS,
 )
-from contitool.i18n import get_lang, tr
+from contitool.i18n import tr
 from contitool.progress import LogEntry, OperationReporter, ProgressSnapshot, StepSnapshot
 
 _ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
@@ -446,7 +446,7 @@ def format_dflash_report(
         )
         for fsc in swap_summary.active_fscs:
             fec_names = KNOWN_GATEWAY_FECS.get(fsc.fec_code)
-            desc = (fec_names[1] if get_lang() == "en" else fec_names[0]) if fec_names else "Custom FeC"
+            desc = tr(fec_names[0], fec_names[1]) if fec_names else tr("Пользовательский FeC", "Custom FeC")
             kind_tag = "[Multi-FSC]" if fsc.factory_eol else "[RSA-FSC]"
             ds_badge = ""
             if dataset_summary is not None:
@@ -682,7 +682,7 @@ def format_guide_text(style: Style | None = None) -> str:
         ),
     ]
     for pin, sig, desc_ru, desc_en in T20_BENCH_PINS:
-        desc = desc_ru if get_lang() == "ru" else desc_en
+        desc = tr(desc_ru, desc_en)
         lines.append(f"   • Pin {pin:>2} ({sig:<12}) — {desc}")
     lines.extend(
         [

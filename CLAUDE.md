@@ -13,7 +13,7 @@ It is built for legitimate independent automotive diagnostics, ECU bench repair/
 
 - `conti_cp_tool.py` — Convenience entry point (launches the Qt 6 Desktop GUI when invoked without arguments, or dispatches to the CLI when subcommands are passed).
 - `src/contitool/`
-  - `i18n.py` — Runtime bilingual localization (`ru` / `en`) with live observer callbacks.
+  - `i18n.py` — Runtime localization (`ru` / `en` / `cn`) with live observer callbacks. Chinese strings live in `i18n_cn.json`, keyed by the English text.
   - `progress.py` — Thread-safe `OperationReporter` streaming step `[i/N]`, `%`, byte throughput (`KB/s`), elapsed time, `ETA`, and structured logs to both GUI and CLI.
   - `storage.py` — Per-gateway run directory layout (`contitool_runs/<part>_<fazit>/dumps/` with `base_read`, `*_read`, and `*_flashed` + `manifest.json`, and `writes/` for write/diagnostic session logs and pre-write backups).
   - `updates.py` + `gui/update_check.py` — Privacy-preserving GitHub release checker (queries only the public latest-release endpoint).
@@ -50,4 +50,4 @@ QT_QPA_PLATFORM=offscreen ./.venv/bin/pytest -v
 
 1. **Preserve Hardware-Verified Protocols & Checksums**: Never alter verified `CRC-16` / `CRC-32` polynomials, cryptographic primitives, binary offsets, or CAN / ISO-TP frame sequences in `src/contitool/core/` and `src/contitool/can/`.
 2. **Real-Time User Feedback**: Every long-running operation must accept an `OperationReporter` and run on a background worker in the GUI so the main Qt event loop never blocks.
-3. **Bilingual Parity**: All user-facing GUI and CLI strings must provide both Russian and English translations via `tr(ru, en)`.
+3. **Language Parity**: All user-facing GUI and CLI strings must provide Russian and English via `tr(ru, en)`. Chinese (`-l cn`) is resolved from `i18n_cn.json` by the English text; add a new line there when you add a user-facing string.

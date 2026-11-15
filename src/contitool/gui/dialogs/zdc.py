@@ -67,7 +67,7 @@ from contitool.gui.connection import CanConnection, ensure_ready
 from contitool.gui.theme import mono_font
 from contitool.gui.widgets.page import Callout, Dialog, Section, button, divider, group_label, hint, row
 from contitool.gui.worker import OperationRunner
-from contitool.i18n import get_lang, tr
+from contitool.i18n import tr
 
 # Human-readable descriptions for standard driving profile slots 1..9
 _SLOT_DESCRIPTIONS: dict[int, tuple[str, str, str, str]] = {
@@ -114,7 +114,7 @@ def _scroll_tab(content: QWidget) -> QScrollArea:
 def _slot_short_name(slot: int) -> str:
     meta = _SLOT_DESCRIPTIONS.get(slot)
     if meta:
-        return meta[1] if get_lang() == "en" else meta[0]
+        return tr(meta[0], meta[1])
     return f"#{slot}"
 
 
@@ -173,7 +173,7 @@ class FpaEditorDialog(Dialog):
                 "",
             )
         for key, ru, en in FPA_PRESET_CATALOG:
-            self.cmb_preset.addItem(en if get_lang() == "en" else ru, key)
+            self.cmb_preset.addItem(tr(ru, en), key)
         if not self._needs_onboarding:
             det_idx = self.cmb_preset.findData(self.fpa.detected_preset())
             if det_idx >= 0:
@@ -366,7 +366,7 @@ class FpaEditorDialog(Dialog):
             ("mfl", "Только кнопка на руле (если кнопки MODE нет)", "Wheel button only (no MODE button)"),
             ("none", "Без кнопок, только экран магнитолы", "No buttons, head-unit screen only"),
         ):
-            self.cmb_btn_mode.addItem(en if get_lang() == "en" else ru, val)
+            self.cmb_btn_mode.addItem(tr(ru, en), val)
         self.cmb_btn_mode.currentIndexChanged.connect(lambda _i: self._sync_button_controls())
         sec_mode.body.addWidget(self.cmb_btn_mode)
         lay.addWidget(sec_mode)
@@ -406,7 +406,7 @@ class FpaEditorDialog(Dialog):
 
         self.cmb_mfl_preset = QComboBox()
         for code, ru, en in MFL_KEYCODE_PRESETS:
-            self.cmb_mfl_preset.addItem(en if get_lang() == "en" else ru, code)
+            self.cmb_mfl_preset.addItem(tr(ru, en), code)
         self.cmb_mfl_preset.addItem(tr("Другая кнопка (ввести код вручную)…", "Other button (enter code manually)…"), -1)
         self.cmb_mfl_preset.currentIndexChanged.connect(self._on_mfl_preset_changed)
 
@@ -515,7 +515,7 @@ class FpaEditorDialog(Dialog):
             "all",
         )
         for key, _pair, ru, en in _WHEEL_QUICK_PAIRS:
-            self.cmb_mfl_ring_mode.addItem(en if get_lang() == "en" else ru, key)
+            self.cmb_mfl_ring_mode.addItem(tr(ru, en), key)
         self.cmb_mfl_ring_mode.addItem(
             tr("Выбрать свой набор профилей галочками…", "Choose custom profiles…"),
             "custom",
@@ -810,7 +810,7 @@ class FpaEditorDialog(Dialog):
             f"{tr('Формат блока:', 'ECU format:')} {self.fpa.schema_tag or '—'}{rotary_txt}"
         )
         ch_ru, ch_en = self.fpa.chassis_summary()
-        ch_txt = ch_en if get_lang() == "en" else ch_ru
+        ch_txt = tr(ch_ru, ch_en)
         self.lbl_detected_base.setText(
             f"{tr('Ближайший шаблон:', 'Closest template:')} {ch_txt}"
         )
@@ -859,8 +859,8 @@ class FpaEditorDialog(Dialog):
                 st = by_slot.get(slot_num)
                 is_on = False if (self._unconfigured or st is None) else bool(st.selectable)
                 name_ru, name_en, desc_ru, desc_en = _SLOT_DESCRIPTIONS[slot_num]
-                title = name_en if get_lang() == "en" else name_ru
-                desc = desc_en if get_lang() == "en" else desc_ru
+                title = tr(name_ru, name_en)
+                desc = tr(desc_ru, desc_en)
 
                 it_en = QTableWidgetItem(f"  {title}")
                 it_en.setData(Qt.ItemDataRole.UserRole, slot_num)
@@ -917,7 +917,7 @@ class FpaEditorDialog(Dialog):
         self.fpa.set_slot_enabled(slot_i, en)  # switching a slot back on brings back what it had
         ch_ru, ch_en = self.fpa.chassis_summary()
         self.lbl_detected_base.setText(
-            f"{tr('Ближайший шаблон:', 'Closest template:')} {ch_en if get_lang() == 'en' else ch_ru}"
+            f"{tr('Ближайший шаблон:', 'Closest template:')} {tr(ch_ru, ch_en)}"
         )
         self._populate_slots_table()
         self._update_ring_previews(from_checks=False, is_mfl=False)
@@ -1217,7 +1217,7 @@ class FpaEditorDialog(Dialog):
                         cmb.addItem(f"{tr('Ступень', 'Step')} {step}{dcc_step_notes.get(step, '')}", step)
                 else:
                     for mval, (mru, men) in FPA_TARGET_MODE_NAMES.items():
-                        cmb.addItem(men if get_lang() == "en" else mru, mval)
+                        cmb.addItem(tr(mru, men), mval)
                 if cmb.findData(cur_m) < 0:
                     cmb.addItem(f"{cur_m}", cur_m)
                 cmb.setCurrentIndex(max(0, cmb.findData(cur_m)))
@@ -1614,7 +1614,7 @@ class SsaEditorDialog(Dialog):
 
         self.cmb_mode = QComboBox()
         for val, ru, en in SSA_OUTPUT_MODES:
-            self.cmb_mode.addItem(en if get_lang() == "en" else ru, val)
+            self.cmb_mode.addItem(tr(ru, en), val)
         self.cmb_mode.setCurrentIndex(max(0, self.cmb_mode.findData(self._cfg.bap_output_mode)))
 
         self.spn_delay = QSpinBox()
@@ -1744,7 +1744,7 @@ class BemEditorDialog(Dialog):
         self.cmb_rom = QComboBox()
         for item in ROM_BEM_CATALOG:
             ridx, _sup, _cls, _amps, _rm, _ud, _pm, ru, en = item
-            self.cmb_rom.addItem(en if get_lang() == "en" else ru, ridx)
+            self.cmb_rom.addItem(tr(ru, en), ridx)
         self.cmb_rom.addItem(tr("— Очистить ячейку —", "— Clear slot —"), None)
         self.cmb_rom.currentIndexChanged.connect(self._on_rom_model_picked)
 
@@ -1769,7 +1769,7 @@ class BemEditorDialog(Dialog):
         self.spn_cls.setPrefix("0x")
         self.cmb_sup = QComboBox()
         for sid, (sru, sen) in BEM_SUPPLIER_NAMES.items():
-            self.cmb_sup.addItem(sen if get_lang() == "en" else sru, sid)
+            self.cmb_sup.addItem(tr(sru, sen), sid)
         adv_lay.addWidget(QLabel(tr("Класс LIN:", "LIN Class:")))
         adv_lay.addWidget(self.spn_cls)
         adv_lay.addWidget(QLabel(tr("Поставщик:", "Supplier:")))

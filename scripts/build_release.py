@@ -123,6 +123,7 @@ def build() -> None:
     ]
     # inside the bundle, so they are part of what PyInstaller signs on macOS
     pyi_args += [f"--add-data={ROOT_DIR / name}{os.pathsep}{name if name == 'LICENSES' else '.'}" for name in LEGAL_FILES]
+    pyi_args.append(f"--add-data={SRC_DIR / 'contitool' / 'i18n_cn.json'}{os.pathsep}.")
     if sys_name == "Darwin":
         pyi_args.append("--osx-bundle-identifier=com.perkthefox.contitool")
     if icon_path is not None and icon_path.suffix in (".ico", ".icns"):

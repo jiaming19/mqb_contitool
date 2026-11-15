@@ -39,7 +39,7 @@ from contitool.gui import theme
 from contitool.gui.theme import mono_font, set_tone
 from contitool.gui.widgets.file_drop import DumpFileSelector
 from contitool.gui.widgets.page import Callout, Dialog, button, group_label, hint, row
-from contitool.i18n import get_lang, tr
+from contitool.i18n import tr
 
 _SWAP_ROW_H = 27
 
@@ -166,7 +166,7 @@ class SwapActivateDialog(Dialog):
             it_code.setFont(mono_font(12, bold=True))
 
             ru_d, en_d = KNOWN_GATEWAY_FECS.get(code, (f"Пользовательский FeC (0x{code:08X})", f"Custom FeC (0x{code:08X})"))
-            feat_label = (en_d if get_lang() == "en" else ru_d).replace(f" (0x{code:08X})", "")
+            feat_label = tr(ru_d, en_d).replace(f" (0x{code:08X})", "")
             it_name = QTableWidgetItem(feat_label)
             it_name.setFlags(Qt.ItemFlag.ItemIsEnabled)
 
@@ -221,7 +221,7 @@ class SwapActivateDialog(Dialog):
             "surgical",
         )
         for pkey, pru, pen in FPA_PRESET_CATALOG:
-            self.cmb_param_preset.addItem(pen if get_lang() == "en" else pru, pkey)
+            self.cmb_param_preset.addItem(tr(pru, pen), pkey)
 
         self.cmb_param_btn = QComboBox()
         for bkey, bru, ben in (
@@ -230,12 +230,12 @@ class SwapActivateDialog(Dialog):
             ("both", "Кнопка MODE на консоли + кнопка на руле", "Console MODE + steering-wheel button"),
             ("mfl", "Только кнопка на руле", "Steering-wheel button only"),
         ):
-            self.cmb_param_btn.addItem(ben if get_lang() == "en" else bru, bkey)
+            self.cmb_param_btn.addItem(tr(bru, ben), bkey)
 
         self.lbl_param_wheel = QLabel(tr("Кнопка на руле:", "Wheel button:"))
         self.cmb_param_mfl_key = QComboBox()
         for kcode, kru, ken in MFL_KEYCODE_PRESETS:
-            self.cmb_param_mfl_key.addItem(ken if get_lang() == "en" else kru, kcode)
+            self.cmb_param_mfl_key.addItem(tr(kru, ken), kcode)
 
         pf_grid.addWidget(QLabel(tr("Шаблон профилей:", "Profile template:")), 0, 0)
         pf_grid.addWidget(self.cmb_param_preset, 0, 1)
@@ -502,7 +502,7 @@ class FscDialog(Dialog):
         self.cmb_fec.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
         self.cmb_fec.setMinimumContentsLength(28)
         for code, (ru_d, en_d) in KNOWN_GATEWAY_FECS.items():
-            self.cmb_fec.addItem(f"{code:08X} — {en_d if get_lang() == 'en' else ru_d}", f"{code:08X}")
+            self.cmb_fec.addItem(f"{code:08X} — {tr(ru_d, en_d)}", f"{code:08X}")
         grid.addWidget(QLabel(tr("Функция", "Feature")), 0, 0)
         grid.addWidget(self.cmb_fec, 0, 1, 1, 3)
 

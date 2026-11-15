@@ -63,7 +63,7 @@ from contitool.core.hw_extra import (
     is_plausible_opbt_bytes,
     normalize_idcode_bytes,
 )
-from contitool.i18n import get_lang, tr
+from contitool.i18n import tr
 
 
 def encode_jr_disp22(pc: int, target: int) -> bytes:
@@ -383,7 +383,7 @@ class ZdcBlockInfo:
 
     @property
     def name(self) -> str:
-        return self.name_en if get_lang() == "en" else self.name_ru
+        return tr(self.name_ru, self.name_en)
 
     @property
     def label(self) -> str:
@@ -403,7 +403,7 @@ class FecDatasetSupport:
 
     @property
     def reason(self) -> str:
-        return self.reason_en if get_lang() == "en" else self.reason_ru
+        return tr(self.reason_ru, self.reason_en)
 
 
 @dataclasses.dataclass

@@ -10,7 +10,7 @@ from contitool.core import T20_BENCH_PINS
 from contitool.gui import theme
 from contitool.gui.theme import mono_font
 from contitool.gui.widgets.page import Callout, Section
-from contitool.i18n import get_lang, subscribe_lang_change, tr
+from contitool.i18n import subscribe_lang_change, tr
 
 PIN_COLORS = {
     1: theme.ERR,  # KL30 +12V
@@ -124,7 +124,7 @@ class PinoutCard(Section):
     def retranslate_ui(self) -> None:
         self.set_text(tr("Разъём T20 — подключение на стенде", "T20 connector — bench wiring"))
         for (_pin, _sig, desc_ru, desc_en), (_num, _name, lbl) in zip(T20_BENCH_PINS, self._pin_labels, strict=True):
-            lbl.setText(desc_ru if get_lang() == "ru" else desc_en)
+            lbl.setText(tr(desc_ru, desc_en))
         self.lbl_warn.setText(
             tr(
                 "<b>Обязательно:</b> включён терминатор в адаптере или установлен резистор 120 Ом между "

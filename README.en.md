@@ -4,6 +4,7 @@
 ### Renesas RH850/F1L — Diagnosis CAN Studio, Component Protection (`KSCHUTZ`), Engineering Mode & `SWaP / RSA-1024`
 
 [![Russian README](https://img.shields.io/badge/lang-%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-2563EB?style=for-the-badge)](README.md)
+[![中文 README](https://img.shields.io/badge/lang-%E4%B8%AD%E6%96%87-2563EB?style=for-the-badge)](README.cn.md)
 [![GUI + CLI](https://img.shields.io/badge/Desktop%20GUI%20%2B%20CLI-Windows%20%7C%20macOS%20%7C%20Linux-0EA5E9?style=for-the-badge)](#quick-start)
 [![MCU RH850/F1L](https://img.shields.io/badge/MCU-Renesas%20RH850%2FF1L%20(64KB%20DFlash)-0284C7?style=for-the-badge)](#the-64-kb-dataflash-rule-for-bench-programmers)
 [![Free](https://img.shields.io/badge/Status-FREE-D97706?style=for-the-badge)](#intended-use--terms)
@@ -13,7 +14,7 @@
 [![Drive2](https://img.shields.io/badge/Drive2-PerkTheFox-E31E24?style=flat-square&logo=rss&logoColor=white)](https://www.drive2.ru/users/perkthefox/)
 [![Telegram](https://img.shields.io/badge/Telegram-%40perkthefox-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/perkthefox)
 
-**Made by PerkTheFox** • **[🇷🇺 Читать на русском (`README.md`)](README.md) | 🇬🇧 English** • **[📚 Deep Technical Docs (`docs/`)](docs/README.md)**
+**Made by PerkTheFox** • **[🇷🇺 Читать на русском (`README.md`)](README.md) | 🇬🇧 English | [中文 (`README.cn.md`)](README.cn.md)** • **[📚 Deep Technical Docs (`docs/`)](docs/README.md)**
 
 </div>
 
@@ -43,7 +44,7 @@
    - **Write a backup back** (including when a gateway is **stuck in its `FBL` bootloader** after an interrupted flash) & **`F15B` fingerprint cure**: you pick the backup files, and ContiTool verifies `FAZIT` / `VCRN` over UDS and refuses a backup of another ECU before the first write command; if a gateway goes silent on Stage 1 due to an older non-zero `F15B` fingerprint, ContiTool automatically offers to cure it with one UDS reflash of its own `CodeFlash`. **Export backup** copies the dumps as read to any folder.
    - **Guided CAN dataset upload & what the ECU itself accepted**: **"Write datasets over CAN"** checks live `SWaP` features (`22 3C 00`) and coding (`22 06 00`), optionally switches missing `SWaP` features on directly inside the gateway's `DataFlash`, uploads `ZDC` blocks over UDS, and aligns `0x0600` coding bits. The SWaP/FEC activation page reads `22 3C 00` — which features are active and which were rejected and why.
    - Every operation shows its current step, progress (`%`), byte counter, transfer speed (`KB/s`), elapsed time and `ETA` in the status bar, and ContiTool quietly checks GitHub Releases for newer versions at startup. The log at the bottom is a short summary by default — the operation, its steps and the outcome; "Detailed" shows the full technical log with addresses, UDS and CAN.
-   - Live 1-click **Русский ⇄ English** language toggle in the header.
+   - Live 1-click **Русский ⇄ 中文 ⇄ English** language toggle in the header (`-l ru` / `-l cn` / `-l en`).
 2. **Full Bench-Programmer Replacement Over Diagnosis CAN (`500 kbit/s` — No ECU Opening Needed)**:
    - Automatic adapter discovery for `CANable` / `SLCAN`, `SocketCAN`, `PCAN`, `Vector`, `Kvaser` and, on Windows, `J2534 PassThru` (Tactrix, Mongoose…) plus `VAS 6154` / `VNCI 6154A` through the ODIS D-PDU driver (using adapter-managed hardware `ISO-TP` for UDS flashing) with a one-click link check, automatic detection/rejection of unsupported `5Q0` and `Lear` (`PowerPC`) gateways, built-in **20-pin J533 `T20`** wiring diagram, and CAN termination confirmation (`VAS 6154` / `VNCI` and `J2534` adapters terminate the bus themselves). While an operation runs, no second link to the adapter is opened. On Windows, verified D-PDU driver `27.2` ships bundled in `dpdu/VW_PDUAPI_27.2` and runs out of the box; versions `30` and newer require an explicit confirmation (on connect the driver reflashes the VCI to its own version). Memory reads need a native USB adapter: serial SLCAN clones (CH340 etc.) lose frames.
    - Full read-only CAN backup of **`Cflash.bin` (`1.5 MB` in `~61 s` via batched `FED_READER`)** + **`Uflash.bin` (`32 KB`)** + **`Dflash.bin` (`64 KB`, deterministic `FACI Blank Check` read)** + **`Eeprom.bin` (`8 KB`, external `ST M95640` SPI EEPROM, read-only)** + **`Opbt.bin` (`36 B`, `OPBT0..OPBT8`, `Extra Area IDCODE @ 0xFF300050`, and `CHIP ID @ 0xFFCD00E0`, read-only)** with `SHA-256` manifests, plus arbitrary physical address range reading (`can read-mem` — flash, `Local RAM`, MMIO registers).
@@ -172,7 +173,7 @@ Connect 5 wires to the gateway's 20-pin connector for **Diagnosis CAN (`500 kbit
 
 ## CLI Usage
 
-Running `python3 conti_cp_tool.py` without arguments opens the Desktop GUI; passing any subcommand runs in CLI mode (`-l en` / `-l ru`):
+Running `python3 conti_cp_tool.py` without arguments opens the Desktop GUI; passing any subcommand runs in CLI mode (`-l en` / `-l ru` / `-l cn`):
 
 ```bash
 # CLI help & read-only dump inspection:

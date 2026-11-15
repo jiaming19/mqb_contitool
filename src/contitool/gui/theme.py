@@ -620,6 +620,7 @@ def build_stylesheet() -> str:
         background-color: #262A33; border-color: #3A3F4D; color: {TEXT};
     }}
     QPushButton#SegBtn[pos="left"] {{ border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-right: none; }}
+    QPushButton#SegBtn[pos="mid"] {{ border-right: none; }}
     QPushButton#SegBtn[pos="right"] {{ border-top-right-radius: 5px; border-bottom-right-radius: 5px; }}
 
     /* ── Inputs ── */

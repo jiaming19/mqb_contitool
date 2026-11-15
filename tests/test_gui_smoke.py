@@ -143,6 +143,12 @@ def test_language_switch_updates_every_visible_screen(synth_cflash, synth_dflash
     win._lang_buttons["ru"].click()
     app.processEvents()
     assert win.ecu_screen.nav_rows["cp"].lbl_name.text() == "Адаптация IKA/CP"
+
+    win._lang_buttons["cn"].click()
+    app.processEvents()
+    assert get_lang() == "cn"
+    assert "控制单元" in win.start_screen.lbl_title.text()
+    set_lang("ru")
     win.close()
 
 

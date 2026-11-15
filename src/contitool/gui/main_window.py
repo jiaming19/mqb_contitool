@@ -202,8 +202,8 @@ class MainWindow(QMainWindow):
         lang_group = QButtonGroup(self)
         lang = QHBoxLayout()
         lang.setSpacing(0)
-        for code, pos in (("ru", "left"), ("en", "right")):
-            b = QPushButton(code.upper())
+        for code, label, pos in (("ru", "RU", "left"), ("cn", "中文", "mid"), ("en", "EN", "right")):
+            b = QPushButton(label)
             b.setObjectName("SegBtn")
             b.setProperty("pos", pos)
             b.setCheckable(True)
