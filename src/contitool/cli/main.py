@@ -95,7 +95,7 @@ from contitool.core import (
     write_dflash_slots,
 )
 from contitool.core import dtc
-from contitool.i18n import detect_early_cli_lang, normalize_lang_code, set_lang, tr
+from contitool.i18n import apply_startup_lang, normalize_lang_code, set_lang, tr
 
 
 def _cli_lang_type(val: str) -> str:
@@ -1303,9 +1303,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     raw_argv = list(sys.argv[1:] if argv is None else argv)
-    early_lang = detect_early_cli_lang(raw_argv)
-    if early_lang:
-        set_lang(early_lang)
+    apply_startup_lang(raw_argv)
 
     ap = build_arg_parser()
     args = ap.parse_args(raw_argv)

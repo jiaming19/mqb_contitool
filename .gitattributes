@@ -1,2 +1,5 @@
 # Volkswagen driver files ship byte for byte: no line-ending conversion
 dpdu/** -text
+
+# cmd.exe parses .bat files as CRLF. eol=crlf keeps that on macOS checkouts too.
+*.bat text eol=crlf

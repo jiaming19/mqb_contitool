@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import sys
+
 import pytest
 
 from contitool.cli.main import build_arg_parser
 from contitool.core import dtc
-from contitool.i18n import get_lang, normalize_lang_code, set_lang, tr
+from contitool.i18n import apply_startup_lang, get_lang, normalize_lang_code, set_lang, tr
 
 
 @pytest.fixture(autouse=True)
@@ -70,3 +72,33 @@ def test_cli_accepts_cn_and_zh() -> None:
 def test_unknown_language_is_rejected() -> None:
     with pytest.raises(ValueError):
         set_lang("de")
+
+
+def test_windows_release_defaults_to_chinese(monkeypatch: pytest.MonkeyPatch) -> None:
+    set_lang("ru")
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "platform", "win32")
+    apply_startup_lang([])
+    assert get_lang() == "cn"
+
+
+def test_windows_release_keeps_explicit_language(monkeypatch: pytest.MonkeyPatch) -> None:
+    set_lang("ru")
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "platform", "win32")
+    apply_startup_lang(["-l", "en"])
+    assert get_lang() == "en"
+    apply_startup_lang(["--lang=ru"])
+    assert get_lang() == "ru"
+
+
+def test_source_and_other_releases_do_not_switch_to_chinese(monkeypatch: pytest.MonkeyPatch) -> None:
+    set_lang("en")
+    monkeypatch.delattr(sys, "frozen", raising=False)
+    apply_startup_lang([])
+    assert get_lang() == "en"
+    set_lang("ru")
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "platform", "darwin")
+    apply_startup_lang([])
+    assert get_lang() == "ru"

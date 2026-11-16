@@ -223,3 +223,12 @@ def detect_early_cli_lang(argv: list[str]) -> str | None:
             if got:
                 return got
     return normalize_lang_code(os.environ.get("CONTI_CP_LANG"))
+
+
+def apply_startup_lang(argv: list[str]) -> None:
+    """Apply `-l` / `CONTI_CP_LANG`. A Windows release with neither starts in Chinese."""
+    chosen = detect_early_cli_lang(argv)
+    if chosen:
+        set_lang(chosen)
+    elif getattr(sys, "frozen", False) and sys.platform == "win32":
+        set_lang("cn")
