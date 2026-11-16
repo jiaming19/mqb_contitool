@@ -80,7 +80,12 @@ exit /b 0
 :install_deps
 echo Installing dependencies. The first run needs a network and can take a few minutes...
 "%VENV_PY%" -m pip --version >nul 2>&1 || "%VENV_PY%" -m ensurepip --upgrade >nul 2>&1
+echo Installing from the Tsinghua PyPI mirror.
+"%VENV_PY%" -m pip install --disable-pip-version-check -r "%ROOT%\requirements-dev.txt" -i https://pypi.tuna.tsinghua.edu.cn/simple
+if not errorlevel 1 goto :deps_imported
+echo The mirror install failed. Trying pypi.org ...
 "%VENV_PY%" -m pip install --disable-pip-version-check -r "%ROOT%\requirements-dev.txt" || exit /b 1
+:deps_imported
 call :imports_ok
 if errorlevel 1 exit /b 2
 call :pyinstaller_ok
@@ -214,9 +219,8 @@ exit /b 1
 
 :pip_fail
 echo Dependency installation failed.
-echo Check that this PC can reach pypi.org, then run this script again.
-echo On a network that blocks PyPI, install with a mirror and run this script again:
-echo   .venv\Scripts\python.exe -m pip install -r requirements-dev.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+echo The script tried the Tsinghua mirror and pypi.org.
+echo Check the network, then run this script again.
 call :hold
 exit /b 1
 
